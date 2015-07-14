@@ -1,4 +1,4 @@
-.TH dtach 1 "Jan 2008" "dtach 0.8"
+.TH dtach 1 "Jul 2015" "dtach 0.9"
 .SH NAME
 dtach \- simple program that emulates the detach feature of screen.
 .SH SYNOPSIS
@@ -13,6 +13,9 @@ dtach \- simple program that emulates the detach feature of screen.
 .br
 .B dtach \-n
 .I <socket> <options> <command...>
+.br
+.B dtach \-i
+.I <socket> <options> <text...>
 
 .SH DESCRIPTION
 .B dtach
@@ -93,6 +96,12 @@ which the specified program is executed.
 .B dtach
 does not try to attach to the newly created session, however, and exits
 instead.
+.TP
+.B \-i
+Attaches to the session specified by
+.IR <socket>, 
+sends specified text on the session's input stream and then disconnects.
+
 
 .PP
 .SS OPTIONS

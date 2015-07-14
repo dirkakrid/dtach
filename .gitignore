@@ -1,0 +1,10 @@
+Makefile
+*.o
+autom4te.cache
+configure
+config.h
+config.log
+config.status
+dtach
+*.un~
+*.swp

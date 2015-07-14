@@ -66,6 +66,16 @@ will likely encounter problems if your terminals have different window
 sizes. Pressing ^L (Ctrl-L) will reset the window size of the program to
 match the current terminal.
 
+dtach can attach briefly to an existing session to inject text as if it
+had been typed into a client attached using the -a or -A modes. The inject
+mode is requested by using -i. For example:
+
+	$ dtach -i /tmp/foozle 'ls -l /var/log^M'
+
+The supplied text is sent verbatim including any embedded control characters
+(e.g appending a newline (^M) character to execute a command). This feature
+allows scripted remote control of detached sessions.
+
 3. DETACHING FROM THE SESSION
 
 By default, dtach scans the keyboard input looking for the detach character.
@@ -113,6 +123,9 @@ When creating a new session (with the -c or -A modes), the specified
 method is used as the default redraw method for the session.
 
 6. CHANGES
+
+The changes in version 0.9 are:
+- A new inject mode -i allows text to be injected into a session.
 
 The changes in version 0.8 are:
 - When using dtach -A or dtach -c, the master will now wait until the client

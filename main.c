@@ -55,6 +55,7 @@ usage()
 		"       dtach -A <socket> <options> <command...>\n"
 		"       dtach -c <socket> <options> <command...>\n"
 		"       dtach -n <socket> <options> <command...>\n"
+		"       dtach -i <socket> <text...>\n"
 		"Modes:\n"
 		"  -a\t\tAttach to the specified socket.\n"
 		"  -A\t\tAttach to the specified socket, or create it if it\n"
@@ -62,6 +63,7 @@ usage()
 		"  -c\t\tCreate a new socket and run the specified command.\n"
 		"  -n\t\tCreate a new socket and run the specified command "
 		"detached.\n"
+		"  -i\t\tInject text to the specified socket.\n"
 		"Options:\n"
 		"  -e <char>\tSet the detach character to <char>, defaults "
 		"to ^\\.\n"
@@ -102,7 +104,7 @@ main(int argc, char **argv)
 		if (mode == '?')
 			usage();
 		else if (mode != 'a' && mode != 'c' && mode != 'n' &&
-			 mode != 'A')
+			 mode != 'A' && mode != 'i')
 		{
 			printf("%s: Invalid mode '-%c'\n", progname, mode);
 			printf("Try '%s --help' for more information.\n",
@@ -202,7 +204,7 @@ main(int argc, char **argv)
 
 	if (mode != 'a' && argc < 1)
 	{
-		printf("%s: No command was specified.\n", progname);
+		printf("%s: No %s was specified.\n", progname, mode=='i' ? "text" : "command");
 		printf("Try '%s --help' for more information.\n",
 			progname);
 		return 1;
@@ -258,5 +260,7 @@ main(int argc, char **argv)
 			return attach_main(0);
 		}
 	}
+	else if (mode == 'i')
+		return attach_inject_main(argv, 0);
 	return 0;
 }

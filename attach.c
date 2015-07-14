@@ -259,3 +259,38 @@ attach_main(int noerror)
 	}
 	return 0;
 }
+
+int
+attach_inject_main(char **argv, int noerror)
+{
+	struct packet pkt;
+	int s;
+
+	/* Attempt to open the socket. Don't display an error if noerror is
+	** set. */
+	s = connect_socket(sockname);
+	if (s < 0)
+	{
+		if (!noerror)
+			printf("%s: %s: %s\n", progname, sockname,
+				strerror(errno));
+		return 1;
+	}
+
+	/* Tell the master that we want to attach. */
+	pkt.type = MSG_ATTACH;
+	write(s, &pkt, sizeof(struct packet));
+
+	/* Send the text */
+	pkt.type = MSG_PUSH;
+	while(strlen(*argv))
+	{
+		memset(pkt.u.buf, 0, sizeof(pkt.u.buf));
+		strncpy((char*)pkt.u.buf,*argv,sizeof(pkt.u.buf)-1);
+		pkt.len = strlen((char*)pkt.u.buf);
+		*argv+=pkt.len;
+		write(s, &pkt, sizeof(struct packet));
+	}
+
+exit(0);
+}
